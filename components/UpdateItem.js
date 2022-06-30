@@ -14,11 +14,14 @@ const UpdateItem = props => {
   const [text1, setText1] = useState('');
   const [text2, setText2] = useState('');
 
+  // If cancelled we close the modal and epmty the textfields
   const handleCancelPress = () => {
     setText1('');
     setText2('');
     props.setModalVisible(false);
   };
+
+  // If cancelled we close the modal, update the item in database and epmty the textfields
   const handleOKPress = () => {
     updateItemInDb(props.tablename, props.itemToUpdate.id, text1, text2);
     props.fetchData();
@@ -27,6 +30,7 @@ const UpdateItem = props => {
     props.setModalVisible(false);
   };
 
+  // We set the textfields initial values to the itemToUpdate values. We set these conditionally using tertiary operator to check that the itemToUpdate is not null/undefined.
   useEffect(() => {
     setText1(props.itemToUpdate === undefined ? '' : props.itemToUpdate.item);
     setText2(props.itemToUpdate === undefined ? '' : props.itemToUpdate.notes);

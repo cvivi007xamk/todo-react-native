@@ -14,11 +14,14 @@ const AddItem = props => {
   const [text1, setText1] = useState('');
   const [text2, setText2] = useState('');
 
+  // If cancelled we close the modal and epmty the textfields
   const handleCancelPress = () => {
     setText1('');
     setText2('');
     props.setModalVisible(false);
   };
+
+  // If ok we add the item to the database, close the modal and empty the textfields
   const handleOKPress = () => {
     addItemToDb(props.tablename, text1, text2);
     props.fetchData();

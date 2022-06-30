@@ -11,6 +11,8 @@ import {
   Switch,
   Alert,
 } from 'react-native';
+
+// useFocusEffect is used to listen to the route changes. When the route changes, the fetchData function is called with the given route as its parameter (That way we get the right lists data only).
 import {useFocusEffect} from '@react-navigation/native';
 
 import AddItem from './AddItem';
@@ -23,22 +25,22 @@ import {
   deleteMultipleItems,
 } from '../controllers/todoControllers';
 
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {GestureHandlerRootView, Swipeable} from 'react-native-gesture-handler'; // We use react-native-gesture-handler npm package to create the Swipeable elements on FlatList.
 
-import Swipeable from 'react-native-gesture-handler/Swipeable';
-
-const ItemScreen = ({navigation, route}) => {
+const ItemScreen = ({route}) => {
   const [itemList, setItemList] = useState([]);
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [updateModalVisible, setUpdateModalVisible] = useState(false);
   const [itemToUpdate, setItemToUpdate] = useState();
   const [selectedItems, setSelectedItems] = useState([]);
 
+  // This function is called whenever the route changes and whenever the list of items is updated. We use it to fetch the data from the database. And pass as a parameter the route name to only get this lists data
   async function fetchData() {
     const items = await readAllItems(route.name);
     setItemList(items);
   }
 
+  // When cliciking the switch on each item it is either added or deleted from the selectedItems array.
   const toggleSwitch = id => {
     if (selectedItems.includes(id)) {
       setSelectedItems(selectedItems.filter(item => item !== id));
@@ -47,11 +49,13 @@ const ItemScreen = ({navigation, route}) => {
     }
   };
 
+  // On pressing the list item we set the item we want to update and open the modal.
   const onPressFunction = id => {
     setItemToUpdate(itemList.find(item => item.id === id));
     setUpdateModalVisible(true);
   };
 
+  // Long pressing the list item opens an alert dialog where the user can choose to delete the item or archive it.
   const openAlertDialog = id =>
     Alert.alert('Delete item', 'Are you sure?', [
       {
@@ -75,6 +79,7 @@ const ItemScreen = ({navigation, route}) => {
       },
     ]);
 
+  // When swiping the list item this components is shown
   const RightActions = () => {
     return (
       <View
@@ -96,9 +101,11 @@ const ItemScreen = ({navigation, route}) => {
     );
   };
 
+  // This is a component that shows each item that is rendered in the FlatList.
   const renderItem = ({item}) => (
     <Swipeable
       renderRightActions={RightActions}
+      // When swiping the list item this it gets deleted from the database.
       onSwipeableRightOpen={() => deleteItemFromDb(item.id)}>
       <View style={{flexDirection: 'row'}}>
         <Switch
@@ -109,6 +116,7 @@ const ItemScreen = ({navigation, route}) => {
           value={selectedItems.includes(item.id)}
           style={{marginHorizontal: 10}}
         />
+        {/*  We use the Pressable componnet to make the list item clickable. */}
         <Pressable
           style={{
             flex: 1,
@@ -136,7 +144,10 @@ const ItemScreen = ({navigation, route}) => {
     </Swipeable>
   );
 
+  // A list itemseparator component (just a line)
   const Separator = () => <View style={styles.itemSeparator} />;
+
+  // This component is shown when the list is empty
   const ListEmptyComponent = () => (
     <Text
       style={{
@@ -147,25 +158,25 @@ const ItemScreen = ({navigation, route}) => {
     </Text>
   );
 
+  // The useFocusEffect is called whenever the route changes.
   useFocusEffect(
     React.useCallback(() => {
       fetchData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [route.name]),
   );
-  // useEffect(() => {
-  //   setItemList(readAllItems(route.name));
-  // }, [route.name]);
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <SafeAreaView style={styles.container}>
+        {/* AddItem is a modal that is shown when new item is added. We pass the table name, modal visibility (and setter) and list update function fetchData as props*/}
         <AddItem
           modalVisible={addModalVisible}
           setModalVisible={setAddModalVisible}
           tablename={route.name}
           fetchData={fetchData}
         />
+        {/* UpdateItem is a modal that is shown when an item is updated. We pass the table name, modal visibility (and setter), list update function fetchData and item which is to be updated as props */}
         <UpdateItem
           modalVisible={updateModalVisible}
           setModalVisible={setUpdateModalVisible}
@@ -173,7 +184,7 @@ const ItemScreen = ({navigation, route}) => {
           tablename={route.name}
           fetchData={fetchData}
         />
-
+        {/* FlatList uses the data source (ItemList) to render the list. */}
         <FlatList
           data={itemList}
           keyExtractor={item => item.id}
