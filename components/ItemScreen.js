@@ -11,6 +11,7 @@ import {
   Switch,
   Alert,
 } from 'react-native';
+import {List, Checkbox} from 'react-native-paper';
 
 // useFocusEffect is used to listen to the route changes. When the route changes, the fetchData function is called with the given route as its parameter (That way we get the right lists data only).
 import {useFocusEffect} from '@react-navigation/native';
@@ -108,37 +109,27 @@ const ItemScreen = ({route}) => {
       // When swiping the list item this it gets deleted from the database.
       onSwipeableRightOpen={() => deleteItemFromDb(item.id)}>
       <View style={{flexDirection: 'row'}}>
-        <Switch
-          trackColor={{false: '#767577', true: '#81b0ff'}}
-          thumbColor={selectedItems.includes(item.id) ? '#2196f3' : '#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={() => toggleSwitch(item.id)}
-          value={selectedItems.includes(item.id)}
-          style={{marginHorizontal: 10}}
-        />
         {/*  We use the Pressable componnet to make the list item clickable. */}
         <Pressable
           style={{
             flex: 1,
-            padding: 10,
           }}
           onPress={() => onPressFunction(item.id)}
           onLongPress={() => openAlertDialog(item.id)}>
-          <Text
-            style={{
-              fontSize: 20,
-              marginHorizontal: 10,
-              color: '#000',
-            }}>
-            {item.item}
-          </Text>
-          <Text
-            style={{
-              fontSize: 15,
-              marginHorizontal: 10,
-            }}>
-            {item.notes}
-          </Text>
+          <List.Item
+            title={item.item}
+            description={item.notes}
+            left={props => (
+              <Checkbox
+                status={
+                  selectedItems.includes(item.id) ? 'checked' : 'unchecked'
+                }
+                onPress={() => {
+                  toggleSwitch(item.id);
+                }}
+              />
+            )}
+          />
         </Pressable>
       </View>
     </Swipeable>

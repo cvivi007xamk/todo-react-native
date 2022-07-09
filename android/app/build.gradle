@@ -317,3 +317,6 @@ def isNewArchitectureEnabled() {
     // - Set an environment variable `ORG_GRADLE_PROJECT_newArchEnabled=true`
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
+
+// Import icons
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
