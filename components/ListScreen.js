@@ -190,15 +190,6 @@ const ListScreen = ({navigation}) => {
       <View style={styles.button}>
         <Button onPress={showDialog} title="Create new list" />
       </View>
-
-      <View style={styles.button}>
-        <Button
-          onPress={() => {
-            console.log('context: ', context.allLists);
-          }}
-          title="Console log lists"
-        />
-      </View>
     </SafeAreaView>
   );
 };

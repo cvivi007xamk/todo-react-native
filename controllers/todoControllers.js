@@ -17,10 +17,9 @@ import {
 export const readAllItems = async tableName => {
   try {
     const dbResult = await fetchAllItems(tableName);
-    console.log('🚀 ~ file: todoControllers.js ~ line 18 ~ dbResult', dbResult);
     return dbResult;
   } catch (err) {
-    console.log('🚀 ~ file: todoControllers.js ~ line 22 ~ err', err);
+    console.log(err);
   }
 };
 
@@ -28,16 +27,10 @@ export const readAllItems = async tableName => {
 export const readAllLists = async () => {
   try {
     const dbResult = await fetchAllLists();
-    console.log(
-      '🚀 ~ file: todoControllers.js ~ line 29 ~ readAllLists ~ dbResult',
-      JSON.stringify(dbResult),
-    );
+
     return dbResult;
   } catch (err) {
-    console.log(
-      '🚀 ~ file: todoControllers.js ~ line 31 ~ readAllLists ~ err',
-      err,
-    );
+    console.log(err);
   }
 };
 
