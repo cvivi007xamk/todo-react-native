@@ -107,7 +107,10 @@ const ItemScreen = ({route}) => {
     <Swipeable
       renderRightActions={RightActions}
       // When swiping the list item this it gets deleted from the database.
-      onSwipeableRightOpen={() => deleteItemFromDb(item.id)}>
+      onSwipeableRightOpen={() => {
+        deleteItemFromDb(route.name, item.id);
+        fetchData();
+      }}>
       <View style={{flexDirection: 'row'}}>
         {/*  We use the Pressable componnet to make the list item clickable. */}
         <Pressable
