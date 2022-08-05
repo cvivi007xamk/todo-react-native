@@ -15,6 +15,7 @@ import {
 
 // Read all items from the database given a table name.
 export const readAllItems = async tableName => {
+  tableName = tableName.toLowerCase().trim().replace(/\s+/g, '_');
   try {
     const dbResult = await fetchAllItems(tableName);
     return dbResult;
@@ -36,6 +37,7 @@ export const readAllLists = async () => {
 
 // Add an item to the database (give table name, item and notes for the item as parameters).
 export const addItemToDb = async (tableName, item, notes) => {
+  tableName = tableName.toLowerCase().trim().replace(/\s+/g, '_');
   try {
     await addItem(tableName, item, notes);
     return readAllItems(tableName);
@@ -46,6 +48,7 @@ export const addItemToDb = async (tableName, item, notes) => {
 
 // Delete an item from the database (give table name and item id as parameters).
 export const deleteItemFromDb = async (tableName, id) => {
+  tableName = tableName.toLowerCase().trim().replace(/\s+/g, '_');
   try {
     await deleteItem(tableName, id);
     return readAllItems(tableName);
@@ -56,6 +59,7 @@ export const deleteItemFromDb = async (tableName, id) => {
 
 // Update an item in the database (give table name, item id, item and notes as parameters).
 export const updateItemInDb = async (tableName, id, item, notes) => {
+  tableName = tableName.toLowerCase().trim().replace(/\s+/g, '_');
   try {
     await updateItem(tableName, id, item, notes);
     return readAllItems(tableName);
@@ -66,6 +70,7 @@ export const updateItemInDb = async (tableName, id, item, notes) => {
 
 // Archive an item in the database (give table name and item id as parameters).
 export const archiveItemInDb = async (tableName, id) => {
+  tableName = tableName.toLowerCase().trim().replace(/\s+/g, '_');
   try {
     await archiveItem(tableName, id);
     return readAllItems(tableName);
@@ -76,6 +81,7 @@ export const archiveItemInDb = async (tableName, id) => {
 
 // Delete multiple items from the database (give table name and item ids in an array as parameters).
 export const deleteMultipleItems = (tableName, array) => {
+  tableName = tableName.toLowerCase().trim().replace(/\s+/g, '_');
   array.forEach(id => {
     deleteItemFromDb(tableName, id);
   });
@@ -86,7 +92,7 @@ export const deleteMultipleItems = (tableName, array) => {
 export const addListToDb = async listname => {
   try {
     await addList(listname);
-    await createTable(listname);
+    await createTable(listname.toLowerCase().trim().replace(/\s+/g, '_'));
     return readAllLists();
   } catch (err) {
     console.log(err);
@@ -115,6 +121,8 @@ export const updateListInDb = async (id, listname) => {
 
 // Update a table in the database (give table name and new table name as parameters).
 export const updateTableInDb = async (tableName, newTableName) => {
+  tableName = tableName.toLowerCase().trim().replace(/\s+/g, '_');
+  newTableName = newTableName.toLowerCase().trim().replace(/\s+/g, '_');
   try {
     await updateTable(tableName, newTableName);
   } catch (err) {
