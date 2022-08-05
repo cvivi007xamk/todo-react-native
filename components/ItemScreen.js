@@ -8,7 +8,7 @@ import {
   Text,
   FlatList,
   Pressable,
-  Switch,
+  //Switch,
   Alert,
 } from 'react-native';
 import {List, Checkbox} from 'react-native-paper';
